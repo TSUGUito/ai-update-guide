@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Illustrator 単位リセット問題の対処方法</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Shippori+Mincho:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f1e8;
+    --bg-card: #fffaf3;
+    --bg-soft: #f0e6d6;
+    --ink: #3d2e2a;
+    --ink-soft: #6b574e;
+    --rose: #c98a7d;
+    --rose-deep: #a86b5e;
+    --sage: #9aab8e;
+    --sage-deep: #788a6d;
+    --gold: #d4a574;
+    --line: #e8dcc8;
+    --shadow: rgba(168, 107, 94, 0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Klee One', 'Hiragino Sans', sans-serif;
+    background: var(--bg);
+    background-image: 
+      radial-gradient(circle at 20% 10%, rgba(201, 138, 125, 0.06) 0%, transparent 40%),
+      radial-gradient(circle at 80% 80%, rgba(154, 171, 142, 0.05) 0%, transparent 40%);
+    color: var(--ink);
+    line-height: 1.8;
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+  }
+
+  .ornament {
+    font-size: 14px;
+    color: var(--rose);
+    letter-spacing: 0.8em;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
+  h1 .accent {
+    color: var(--rose-deep);
+  }
+
+  .subtitle {
+    font-size: 13px;
+    color: var(--ink-soft);
+    letter-spacing: 0.15em;
+  }
+
+  .meta {
+    margin-top: 18px;
+    font-size: 11px;
+    color: var(--ink-soft);
+    letter-spacing: 0.15em;
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+
+  .meta span::before {
+    content: '◇';
+    color: var(--rose);
+    margin-right: 8px;
+    font-size: 9px;
+  }
+
+  .intro {
+    background: var(--bg-card);
+    border-radius: 20px;
+    padding: 28px 32px;
+    margin-bottom: 32px;
+    box-shadow: 0 4px 20px var(--shadow);
+    border: 1px solid var(--line);
+    position: relative;
+  }
+
+  .intro::before {
+    content: '✿';
+    position: absolute;
+    top: -12px;
+    left: 30px;
+    background: var(--rose);
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+
+  .intro h2 {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--rose-deep);
+    margin-bottom: 10px;
+  }
+
+  .intro p {
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+
+  /* --- セクションラベル --- */
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+    padding: 0 4px;
+  }
+
+  .section-label .line {
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  .section-label .label {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 13px;
+    color: var(--rose-deep);
+    letter-spacing: 0.3em;
+    padding: 0 4px;
+  }
+
+  .section-label .label.sage {
+    color: var(--sage-deep);
+  }
+
+  /* --- 解決方法（メイン） --- */
+  .step.main {
+    background: var(--bg-card);
+    border-radius: 20px;
+    padding: 32px 32px 28px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 20px var(--shadow);
+    border: 2px solid var(--rose);
+    position: relative;
+  }
+
+  .step.main::after {
+    content: '';
+    position: absolute;
+    inset: 5px;
+    border: 1px dashed rgba(201, 138, 125, 0.3);
+    border-radius: 15px;
+    pointer-events: none;
+  }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px dashed var(--line);
+    position: relative;
+  }
+
+  .step-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--rose) 0%, var(--rose-deep) 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+    box-shadow: 0 3px 8px rgba(201, 138, 125, 0.3);
+  }
+
+  .step-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--ink);
+    flex: 1;
+  }
+
+  .badge {
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 12px;
+    background: var(--rose);
+    color: white;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+  }
+
+  ol.procedure {
+    list-style: none;
+    counter-reset: step;
+    padding-left: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  ol.procedure li {
+    counter-increment: step;
+    padding: 8px 0 8px 32px;
+    position: relative;
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.9;
+  }
+
+  ol.procedure li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 11px;
+    width: 22px;
+    height: 22px;
+    background: var(--bg-soft);
+    color: var(--rose-deep);
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Klee One', sans-serif;
+  }
+
+  /* --- 予防策セクション --- */
+  .prevention-wrap {
+    background: rgba(154, 171, 142, 0.06);
+    border-radius: 24px;
+    padding: 28px 22px;
+    margin-bottom: 24px;
+  }
+
+  .prevention {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 22px 26px;
+    margin-bottom: 12px;
+    border: 1px solid var(--line);
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .prevention:last-child {
+    margin-bottom: 0;
+  }
+
+  .prevention-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(154, 171, 142, 0.18);
+    color: var(--sage-deep);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .prevention-body {
+    flex: 1;
+  }
+
+  .prevention-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+
+  .prevention-body p {
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.85;
+  }
+
+  code, .path {
+    font-family: 'Menlo', 'Courier New', monospace;
+    background: var(--bg-soft);
+    color: var(--rose-deep);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    word-break: break-all;
+  }
+
+  .path-block {
+    display: block;
+    background: var(--bg-soft);
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin: 10px 0;
+    font-family: 'Menlo', monospace;
+    font-size: 12px;
+    color: var(--rose-deep);
+    border-left: 3px solid var(--rose);
+  }
+
+  kbd {
+    display: inline-block;
+    background: white;
+    color: var(--ink);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-family: 'Menlo', monospace;
+    border: 1px solid var(--line);
+    box-shadow: 0 1px 0 var(--line);
+    margin: 0 2px;
+  }
+
+  strong {
+    color: var(--rose-deep);
+    font-weight: 600;
+  }
+
+  footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 1px solid var(--line);
+    font-size: 12px;
+    color: var(--ink-soft);
+    letter-spacing: 0.1em;
+  }
+
+  footer .leaf {
+    color: var(--sage);
+    margin: 0 8px;
+  }
+
+  @media (max-width: 600px) {
+    body { padding: 24px 14px; }
+    h1 { font-size: 22px; }
+    .step.main, .intro { padding: 24px 22px; }
+    .prevention-wrap { padding: 22px 14px; }
+    .prevention { padding: 18px 20px; }
+    .step-header { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+
+    <header>
+      <div class="ornament">・ ・ ✿ ・ ・</div>
+      <h1>Illustrator の単位が<br><span class="accent">いつのまにかポイント</span>に戻る問題</h1>
+      <div class="subtitle">FOR  MAC  /  Illustrator  CC  2024</div>
+      <div class="meta">
+        <span>作成：TSUGU外部</span>
+        <span>2026.05.21</span>
+      </div>
+    </header>
+
+    <div class="intro">
+      <h2>原因について</h2>
+      <p>起動するたびに設定が変わる症状は、<strong>環境設定ファイルの破損</strong>がほぼ確実な原因です。Illustrator は終了時に設定を書き込みますが、ファイルが壊れていると読み込みに失敗し、毎回デフォルト値（ポイント）に戻ってしまいます。</p>
+    </div>
+
+    <!-- === 解決方法 === -->
+    <div class="section-label">
+      <span class="line"></span>
+      <span class="label">解 決 方 法</span>
+      <span class="line"></span>
+    </div>
+
+    <div class="step main">
+      <div class="step-header">
+        <div class="step-icon">✿</div>
+        <div class="step-title">環境設定ファイルを再生成する</div>
+        <div class="badge">最推奨</div>
+      </div>
+      <p style="font-size:14px;color:var(--ink-soft);margin-bottom:10px;">最も効果的な方法です。破損したファイルを新しく作り直します。</p>
+      <ol class="procedure">
+        <li>Illustrator を完全に終了します</li>
+        <li>Finder で <kbd>⌘</kbd> + <kbd>Shift</kbd> + <kbd>G</kbd> を押し、下記のパスを入力します
+          <span class="path-block">~/Library/Preferences/Adobe Illustrator 28 Settings</span>
+        </li>
+        <li>フォルダ名を <code>Adobe Illustrator 28 Settings_old</code> 等にリネームします</li>
+        <li>Illustrator を起動します（新しい設定フォルダが自動生成されます）</li>
+        <li>単位を mm に設定し、<kbd>⌘</kbd> + <kbd>Q</kbd> で正常終了して保存を確定します</li>
+      </ol>
+    </div>
+
+    <!-- === 再発予防のためのチェック項目 === -->
+    <div class="section-label" style="margin-top:36px;">
+      <span class="line"></span>
+      <span class="label sage">再 発 予 防 の た め に</span>
+      <span class="line"></span>
+    </div>
+
+    <div class="prevention-wrap">
+
+      <div class="prevention">
+        <div class="prevention-icon">❀</div>
+        <div class="prevention-body">
+          <div class="prevention-title">終了方法を必ず正常終了に</div>
+          <p>ウィンドウを閉じるだけでなく、必ず <kbd>⌘</kbd> + <kbd>Q</kbd>（Illustrator を終了）で終わってください。強制終了やシステムシャットダウンに巻き込むと、設定の書き込みが途中で止まり、再発の原因になります。</p>
+        </div>
+      </div>
+
+      <div class="prevention">
+        <div class="prevention-icon">❀</div>
+        <div class="prevention-body">
+          <div class="prevention-title">Creative Cloud の設定同期をオフ</div>
+          <p>Illustrator → 設定 → 同期設定 → <strong>「設定の同期」をオフ</strong> に設定します。別マシンの設定で上書きされる事故を防げます。</p>
+        </div>
+      </div>
+
+      <div class="prevention">
+        <div class="prevention-icon">❀</div>
+        <div class="prevention-body">
+          <div class="prevention-title">Preferences フォルダの権限確認</div>
+          <p>上記パスのフォルダを <kbd>control</kbd> + クリック → 情報を見る →「共有とアクセス権」で、自分のユーザーが <strong>「読み/書き」</strong> になっているか確認してください。</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="intro" style="margin-top: 32px;">
+      <h2>それでも改善しない場合</h2>
+      <p>解決方法でほとんどのケースは改善します。再発を繰り返すようでしたら、Illustrator の再インストールも検討してみてください。</p>
+    </div>
+
+    <footer>
+      <span class="leaf">❦</span> Adobe Illustrator Troubleshooting Note <span class="leaf">❦</span>
+    </footer>
+
+  </div>
+</body>
+</html>
